@@ -201,7 +201,7 @@ const TicketSelection = () => {
                 id="avatar"
                 accept="image/*"
                 className="hidden"
-                // onChange={handleAvatarChange}
+                onChange={handleAvatarChange}
                 ref={fileInputRef}
               />
               <Image
@@ -372,7 +372,8 @@ const TicketSelection = () => {
                 <Image src={step3Header} alt="event details" />
               </div>
               <div className="flex justify-center">
-                <Image src={userImg} alt="avatar url" />
+                {/* <Image src={avatarUrl} alt="avatar url" /> */}
+                <img src={avatarUrl} alt="avatar image" />
               </div>
               <div className="grid grid-cols-2">
                 <div className="border border-[#12464E] p-2">
