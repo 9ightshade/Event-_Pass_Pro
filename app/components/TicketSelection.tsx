@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React from "react";
@@ -20,7 +21,7 @@ const TicketSelection = () => {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [uploading, setUploading] = useState(false);
 
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleTicketCountChange = (event: { target: { value: string } }) => {
     setTicketCount(parseInt(event.target.value));
@@ -43,7 +44,7 @@ const TicketSelection = () => {
     setSpecialRequest(event.target.value);
   };
 
-  const handleAvatarChange = async (event) => {
+  const handleAvatarChange = async (event: { target: { files: any[] } }) => {
     const file = event.target.files[0];
     if (!file) return;
 
@@ -104,7 +105,9 @@ const TicketSelection = () => {
   const progressWidth = (step / 3) * 100;
 
   const triggerFileInput = () => {
-    fileInputRef.current.click();
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   useEffect(() => {
@@ -198,7 +201,7 @@ const TicketSelection = () => {
                 id="avatar"
                 accept="image/*"
                 className="hidden"
-                onChange={handleAvatarChange}
+                // onChange={handleAvatarChange}
                 ref={fileInputRef}
               />
               <Image
