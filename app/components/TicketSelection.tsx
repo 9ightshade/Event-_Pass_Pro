@@ -44,8 +44,8 @@ const TicketSelection = () => {
     setSpecialRequest(event.target.value);
   };
 
-  const handleAvatarChange = async (event: { target: { files: any[] } }) => {
-    const file = event.target.files[0];
+  const handleAvatarChange: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
+    const file = event.target.files?.[0];
     if (!file) return;
 
     setUploading(true);
