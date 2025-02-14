@@ -158,7 +158,11 @@ const TicketSelection = () => {
     <div className="bg-[#041E23] bg-opacity-50 p-6 rounded-3xl shadow-lg w-full max-w-md border border-[#24A0B5] ">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold text-white">
-          {step === 1 ? "Ticket Selection" : "Attendee Details"}
+          {step === 1
+            ? "Ticket Selection"
+            : step === 2
+            ? "Attendee Details"
+            : "Ready"}
         </h2>{" "}
         <p className="text-sm text-[#A8B2D1] text-right">Step {step}/3</p>{" "}
       </div>
@@ -184,7 +188,7 @@ const TicketSelection = () => {
           </p> */}
           {step === 1 ? (
             <Image src={sectionTitle} alt="ticket data" />
-          ) : (
+          ) : step === 2 ? (
             <div onClick={triggerFileInput}>
               <Image
                 src={uploadIcon}
@@ -205,13 +209,17 @@ const TicketSelection = () => {
                 className="md:hidden mx-auto cursor-pointer"
               />
             </div>
-          )}
+          ) : null}
           {uploading ? (
             <div className="mt-2">Uploading...</div>
-          ) : avatarUrl ? (
-            <p className="text-blue-300 my-2 text-ellipsis overflow-hidden" >{avatarUrl}</p>
+          ) : avatarUrl && step === 2 ? (
+            <p className="text-blue-300 my-2 text-ellipsis overflow-hidden">
+              {avatarUrl}
+            </p>
           ) : null}
-          <hr className="bg-[#07373F] h-2 border-none my-4 rounded-[12px] " />
+          {step === 1 || step == 2 ? (
+            <hr className="bg-[#07373F] h-2 border-none my-4 rounded-[12px] " />
+          ) : null}
         </div>
         <div className=" bg-[#041E23] px-3">
           {step === 1 ? (
@@ -295,7 +303,7 @@ const TicketSelection = () => {
               </div>
             </div>
           </div>
-        ) : (
+        ) : step === 2 ? (
           <div>
             <div className="bg-[#041E23] rounded-xl p-4">
               {/* Add your form fields for name, email, etc. */}
@@ -351,17 +359,38 @@ const TicketSelection = () => {
               </div>
             </div>
           </div>
-        )}
+        ) : null}
+
+        {/* step 3 display */}
+        {step === 3 ? (
+          <div className="text-center" >
+            <h1>Your Ticket Is Booked!</h1>
+            <p>Check your Email For a Copy or You can download</p>
+          </div>
+        ) : null}
+
         <div className="flex flex-col-reverse md:flex-row  p-3 gap-2 items-center">
           <button
             className="bg-transparent border w-full border-[#24A0B5] hover:bg-[#64FFDA] text-[#24A0B5] hover:text-[#0A192F] font-medium py-2 px-4 rounded-xl transition-colors duration-200  basis-1/2 "
             onClick={handleBack}>
-            {step === 1 ? "Cancel" : "Back"}
+            {step === 1
+              ? "Cancel"
+              : step === 2
+              ? "Back"
+              : step === 3
+              ? "Book Another Ticket"
+              : null}
           </button>
           <button
             className="bg-[#24A0B5] hover:bg-[#50d8b7] w-full basis-1/2 text-white font-medium py-2 px-4 rounded-xl transition-colors duration-200"
             onClick={handleNext}>
-            {step === 1 ? "Next" : "Get My Free Ticket"}
+            {step === 1
+              ? "Next"
+              : step === 2
+              ? "Get My Free Ticket"
+              : step === 3
+              ? "Download Ticket"
+              : null}
           </button>
         </div>
       </div>
