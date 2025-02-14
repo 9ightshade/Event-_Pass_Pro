@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import sectionTitle from "@/public/SectionTitle.png";
 import emailIcon from "@/public/icon.png";
@@ -14,6 +14,10 @@ const TicketSelection = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [specialRequest, setSpecialRequest] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState(""); // store image URL
+  const [uploading, setUploading] = useState(false); // Track upload state
+
+  const fileInputRef = useRef(null);
 
   const handleTicketCountChange = (event: { target: { value: string } }) => {
     setTicketCount(parseInt(event.target.value));
@@ -34,6 +38,40 @@ const TicketSelection = () => {
 
   const handleSpecialRequestChange = (event: { target: { value: string } }) => {
     setSpecialRequest(event.target.value);
+  };
+
+  const handleAvatarChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "ticket_avatars"); // Replace with your Cloudinary upload preset
+
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setAvatarUrl(data.secure_url);
+      } else {
+        console.error("Upload failed:", response.statusText);
+        // Handle upload failure (e.g., display an error message)
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      // Handle network errors
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleNext = () => {
@@ -67,6 +105,10 @@ const TicketSelection = () => {
   // Calculate progress bar width based on the step
   const progressWidth = (step / 3) * 100;
 
+  const triggerFileInput = () => {
+    fileInputRef.current.click();
+  };
+
   useEffect(() => {
     // Load data from localStorage on component mount
     const storedTicketType = localStorage.getItem("ticketType");
@@ -75,6 +117,8 @@ const TicketSelection = () => {
     const storedName = localStorage.getItem("name");
     const storedEmail = localStorage.getItem("email");
     const storedSpecialRequest = localStorage.getItem("specialRequest");
+    const storedAvatarUrl = localStorage.getItem("avatarUrl");
+    console.log("this is stored avatar url", storedAvatarUrl);
 
     if (storedTicketType) {
       setTicketType(storedTicketType);
@@ -94,6 +138,9 @@ const TicketSelection = () => {
     if (storedSpecialRequest) {
       setSpecialRequest(storedSpecialRequest);
     }
+    if (storedAvatarUrl) {
+      setAvatarUrl(storedAvatarUrl);
+    }
   }, []);
 
   useEffect(() => {
@@ -104,7 +151,9 @@ const TicketSelection = () => {
     localStorage.setItem("name", name);
     localStorage.setItem("email", email);
     localStorage.setItem("specialRequest", specialRequest);
-  }, [ticketType, ticketCount, step, name, email, specialRequest]);
+    localStorage.setItem("avatarUrl", avatarUrl);
+  }, [ticketType, ticketCount, step, name, email, specialRequest, avatarUrl]);
+
   return (
     <div className="bg-[#041E23] bg-opacity-50 p-6 rounded-3xl shadow-lg w-full max-w-md border border-[#24A0B5] ">
       <div className="flex justify-between items-center mb-6">
@@ -136,11 +185,19 @@ const TicketSelection = () => {
           {step === 1 ? (
             <Image src={sectionTitle} alt="ticket data" />
           ) : (
-            <div>
+            <div onClick={triggerFileInput}>
               <Image
                 src={uploadIcon}
                 alt="upload photo"
                 className="cursor-pointer hidden md:block"
+              />
+              <input
+                type="file"
+                id="avatar"
+                accept="image/*"
+                className="hidden"
+                onChange={handleAvatarChange}
+                ref={fileInputRef}
               />
               <Image
                 src={uploadIconSm}
@@ -149,7 +206,11 @@ const TicketSelection = () => {
               />
             </div>
           )}
-
+          {uploading ? (
+            <div className="mt-2">Uploading...</div>
+          ) : avatarUrl ? (
+            <p className="text-blue-300 my-2 text-ellipsis overflow-hidden" >{avatarUrl}</p>
+          ) : null}
           <hr className="bg-[#07373F] h-2 border-none my-4 rounded-[12px] " />
         </div>
         <div className=" bg-[#041E23] px-3">
