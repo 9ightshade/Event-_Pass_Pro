@@ -7,9 +7,10 @@ const TicketSelection = () => {
 
   const handleTicketTypeChange = (type: React.SetStateAction<string>) => {
     setTicketType(type);
+    console.log(ticketType);
   };
 
-  const handleTicketCountChange = (event: { target: { value: string; }; }) => {
+  const handleTicketCountChange = (event: { target: { value: string } }) => {
     setTicketCount(parseInt(event.target.value));
   };
   return (
@@ -19,7 +20,7 @@ const TicketSelection = () => {
         <p>Step 1/3</p>
 
         <div className="event-info">
-          <h3>Techember Fest "25"</h3>
+          <h3>Techember Fest 25</h3>
           <p>
             Join us for an unforgettable experience at [Event Name]! Secure your
             spot now.
