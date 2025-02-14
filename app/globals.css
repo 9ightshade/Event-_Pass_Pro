@@ -19,3 +19,8 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* .container{
+  background: url("@/public/bg.png");
+  background-repeat: no-repeat;
+  background-position: center;
+} */

@@ -6,6 +6,8 @@ import sectionTitle from "@/public/SectionTitle.png";
 import emailIcon from "@/public/icon.png";
 import uploadIcon from "@/public/uploadIcon.png";
 import uploadIconSm from "@/public/smUploadIcon.png";
+import step3Header from "@/public/Event.Title.Date.png";
+import userImg from "@/public/User.img.png";
 const TicketSelection = () => {
   const [ticketType, setTicketType] = useState("");
   const [ticketCount, setTicketCount] = useState(1);
@@ -174,8 +176,8 @@ const TicketSelection = () => {
       </div>
 
       {/* wrapping div */}
-      <div className="border border-[#24A0B5] rounded-[12px]">
-        <div className="bg-[#041E23]  rounded-2xl p-4">
+      <div className="rounded-[12px]">
+        <div className="bg-[#041E23]  rounded-2xl p-4" style={{border:`${step!== 3? "1px #24A0B5 solid" : ""}`}} >
           {/* <h3 className="text-xl font-semibold mb-1 text-white">
             Techember Fest &quot;25
           </h3>
@@ -363,9 +365,41 @@ const TicketSelection = () => {
 
         {/* step 3 display */}
         {step === 3 ? (
-          <div className="text-center" >
+          <div className="text-center">
             <h1>Your Ticket Is Booked!</h1>
             <p>Check your Email For a Copy or You can download</p>
+
+            <div className="border flex flex-col gap-2 rounded-xl">
+              <div className="flex justify-center">
+                <Image src={step3Header} alt="event details" />
+              </div>
+              <div className="flex justify-center" >
+                <Image src={userImg} alt="avatar url" />
+              </div>
+              <div className="grid grid-col-2">
+                <div>
+                  <p>Enter Your Name</p>
+                  <p>{name}</p>
+                </div>
+                <div>
+                  <p>Enter Your email</p>
+                  <p>{email}</p>
+                </div>
+                <div>
+                  <p>Ticket Type:</p>
+                  <p>{ticketType}</p>
+                </div>
+                <div>
+                  <p>Ticket For:</p>
+                  <p>{ticketCount}</p>
+                </div>
+              </div>
+
+              <div>
+                <p>special request?</p>
+                <p>{specialRequest}</p>
+              </div>
+            </div>
           </div>
         ) : null}
 
