@@ -16,8 +16,8 @@ const TicketSelection = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [specialRequest, setSpecialRequest] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState(""); // store image URL
-  const [uploading, setUploading] = useState(false); // Track upload state
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const fileInputRef = useRef(null);
 
@@ -27,7 +27,7 @@ const TicketSelection = () => {
 
   const handleTicketTypeChange = (type: React.SetStateAction<string>) => {
     setTicketType(type);
-    setTicketTypeError(""); // Clear the error when a selection is made
+    setTicketTypeError("");
   };
 
   const handleNameChange = (event: { target: { value: string } }) => {
@@ -50,7 +50,7 @@ const TicketSelection = () => {
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "ticket_avatars"); // Replace with your Cloudinary upload preset
+    formData.append("upload_preset", "ticket_avatars");
 
     try {
       const response = await fetch(
@@ -66,11 +66,9 @@ const TicketSelection = () => {
         setAvatarUrl(data.secure_url);
       } else {
         console.error("Upload failed:", response.statusText);
-        // Handle upload failure (e.g., display an error message)
       }
     } catch (error) {
       console.error("Upload error:", error);
-      // Handle network errors
     } finally {
       setUploading(false);
     }
@@ -85,8 +83,6 @@ const TicketSelection = () => {
     }
 
     if (step === 2) {
-      // Add validation for step 2 here (name, email, etc.)
-      // If validation fails, return without incrementing the step
     }
 
     if (step < 3) {
@@ -104,7 +100,6 @@ const TicketSelection = () => {
     setStep(1);
   };
 
-  // Calculate progress bar width based on the step
   const progressWidth = (step / 3) * 100;
 
   const triggerFileInput = () => {
@@ -112,7 +107,6 @@ const TicketSelection = () => {
   };
 
   useEffect(() => {
-    // Load data from localStorage on component mount
     const storedTicketType = localStorage.getItem("ticketType");
     const storedTicketCount = localStorage.getItem("ticketCount");
     const storedStep = localStorage.getItem("step");
@@ -146,7 +140,6 @@ const TicketSelection = () => {
   }, []);
 
   useEffect(() => {
-    // Save data to localStorage whenever it changes
     localStorage.setItem("ticketType", ticketType);
     localStorage.setItem("ticketCount", ticketCount.toString());
     localStorage.setItem("step", step.toString());
@@ -177,7 +170,9 @@ const TicketSelection = () => {
 
       {/* wrapping div */}
       <div className="rounded-[12px]">
-        <div className="bg-[#041E23]  rounded-2xl p-4" style={{border:`${step!== 3? "1px #24A0B5 solid" : ""}`}} >
+        <div
+          className="bg-[#041E23]  rounded-2xl p-4"
+          style={{ border: `${step !== 3 ? "1px #24A0B5 solid" : ""}` }}>
           {/* <h3 className="text-xl font-semibold mb-1 text-white">
             Techember Fest &quot;25
           </h3>
@@ -308,7 +303,6 @@ const TicketSelection = () => {
         ) : step === 2 ? (
           <div>
             <div className="bg-[#041E23] rounded-xl p-4">
-              {/* Add your form fields for name, email, etc. */}
               <div className="mb-4">
                 <label
                   htmlFor="name"
@@ -373,29 +367,29 @@ const TicketSelection = () => {
               <div className="flex justify-center">
                 <Image src={step3Header} alt="event details" />
               </div>
-              <div className="flex justify-center" >
+              <div className="flex justify-center">
                 <Image src={userImg} alt="avatar url" />
               </div>
-              <div className="grid grid-col-2">
-                <div>
-                  <p>Enter Your Name</p>
+              <div className="grid grid-cols-2">
+                <div className="border border-[#12464E] p-2">
+                  <p>Enter Your Name:</p>
                   <p>{name}</p>
                 </div>
-                <div>
+                <div className="border border-[#12464E] p-2">
                   <p>Enter Your email</p>
-                  <p>{email}</p>
+                  <p className="overflow-hidden ellipsis">{email}</p>
                 </div>
-                <div>
+                <div className="border border-[#12464E] p-2">
                   <p>Ticket Type:</p>
                   <p>{ticketType}</p>
                 </div>
-                <div>
+                <div className="border border-[#12464E] p-2">
                   <p>Ticket For:</p>
                   <p>{ticketCount}</p>
                 </div>
               </div>
 
-              <div>
+              <div className="border-b border-[#12464E] p-2">
                 <p>special request?</p>
                 <p>{specialRequest}</p>
               </div>
